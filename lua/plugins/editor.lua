@@ -118,7 +118,7 @@ return {
     })
     opts.pickers = {
       diagnostics = {
-        theme = "ivy",
+        -- theme = "ivy",
         initial_mode = "normal",
         layout_config = {
           preview_cutoff = 9999,
