@@ -4,7 +4,7 @@ return {
   priority = 1000,
   opts = function()
     return {
-      transparent_background = false,
+      transparent_background = true,
       flavour = "mocha",
     }
   end,
