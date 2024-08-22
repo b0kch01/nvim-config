@@ -5,6 +5,10 @@ return {
       ensured_installed = {
         "css",
         "gitignore",
+        "typescript",
+        "javascript",
+        "python",
+        "lua",
       },
     },
   },
