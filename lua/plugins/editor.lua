@@ -19,15 +19,6 @@ return {
     },
     keys = {
       {
-        "<leader>fP",
-        function()
-          require("telescope.builtin").find_files({
-            cwd = require("lazy.core.config").options.root,
-          })
-        end,
-        desc = "Find Plugin File",
-      },
-      {
         ";f",
         function()
           local builtin = require("telescope.builtin")
@@ -63,14 +54,6 @@ return {
           builtin.diagnostics()
         end,
         desc = "Lists Diagnostics for all open buffers or a specific buffer",
-      },
-      {
-        ";s",
-        function()
-          local builtin = require("telescope.builtin")
-          builtin.treesitter()
-        end,
-        desc = "Lists Function names, variables, from Treesitter",
       },
       {
         ";t",
@@ -153,5 +136,16 @@ return {
       require("telescope").load_extension("fzf")
       require("telescope").load_extension("file_browser")
     end,
+  },
+
+  {
+    "OlegGulevskyy/better-ts-errors.nvim",
+    dependencies = { "MunifTanjim/nui.nvim" },
+    config = {
+      keymaps = {
+        toggle = "<leader>dd", -- default '<leader>dd'
+        go_to_definition = "<leader>dx", -- default '<leader>dx'
+      },
+    },
   },
 }

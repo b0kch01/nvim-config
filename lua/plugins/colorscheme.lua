@@ -3,12 +3,10 @@ return {
     "catppuccin/nvim",
     name = "catppuccin",
     priority = 1000,
-    opts = function()
-      return {
-        transparent_background = true,
-        flavour = "mocha",
-      }
-    end,
+    opts = {
+      transparent_background = true,
+      flavour = "mocha",
+    },
   },
   {
     "arzg/vim-colors-xcode",
