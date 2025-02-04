@@ -16,6 +16,22 @@ return {
       -- - sd'   - [S]urround [D]elete [']quotes
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
+
+      -- Super clean and nice file tree thing
+      local MiniFiles = require 'mini.files'
+
+      MiniFiles.setup {
+        mappings = {
+          go_in = '<CR>',
+          go_in_plus = 'L',
+          go_out = '-',
+          go_out_plus = 'H',
+          close = '<leader>e',
+        },
+      }
+      vim.keymap.set('n', '<leader>e', '<cmd>lua MiniFiles.open()<CR>', {
+        desc = 'Toggle mini file explorer',
+      })
     end,
   },
 }
