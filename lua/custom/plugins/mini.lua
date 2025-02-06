@@ -26,7 +26,7 @@ return {
           go_in_plus = 'L',
           go_out = '-',
           go_out_plus = 'H',
-          close = '<leader>e',
+          close = 'q',
         },
       }
       vim.keymap.set('n', '<leader>e', '<cmd>lua MiniFiles.open()<CR>', {

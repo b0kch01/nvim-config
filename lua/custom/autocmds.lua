@@ -12,7 +12,8 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
--- vim.api.nvim_create_augroup('TermOpen', {
---   desc = 'Hide line number in terminal',
---   group = vim.api.nvim_create_autocmd('hide-terminal-line-numbers', { clear = true }),
--- })
+vim.api.nvim_create_autocmd('TermOpen', {
+  desc = 'Hide line number in terminal',
+  group = vim.api.nvim_create_augroup('hide-terminal-line-numbers', { clear = true }),
+  command = 'set nonumber',
+})
