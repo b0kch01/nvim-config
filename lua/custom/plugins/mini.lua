@@ -10,7 +10,7 @@ return {
       --  - ci'  - [C]hange [I]nside [']quote
       require('mini.ai').setup { n_lines = 500 }
 
-      -- Add/delete/replace surroundings (brackets, quotes, etc.)
+      -- Add/delete/replace (brackets, quotes, etc.)
       --
       -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
       -- - sd'   - [S]urround [D]elete [']quotes
@@ -18,8 +18,8 @@ return {
       require('mini.surround').setup()
 
       -- Super clean and nice file tree thing
-      local MiniFiles = require 'mini.files'
-
+      -- local MiniFiles = require 'mini.files'
+      --
       -- MiniFiles.setup {
       --   mappings = {
       --     go_in = '<CR>',
