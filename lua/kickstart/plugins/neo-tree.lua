@@ -17,7 +17,7 @@ return {
     filesystem = {
       window = {
         mappings = {
-          ['<leader>E'] = 'close_window',
+          ['<leader>e'] = 'close_window',
         },
       },
     },
