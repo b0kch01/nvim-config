@@ -3,7 +3,7 @@ return {
   keys = {
     {
       '<leader>fml',
-      '<cmd>CelluarAutomation make_it_rain<CR>',
+      '<cmd>CelluarAutomaton make_it_rain<cr>',
       desc = 'Make it rain.',
     },
   },
