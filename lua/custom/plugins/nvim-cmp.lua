@@ -25,6 +25,8 @@ return {
           --     require('luasnip.loaders.from_vscode').lazy_load()
           --   end,
           -- },
+          'tailwind-tools',
+          'onsails/lspkind-nvim',
         },
       },
       'saadparwaiz1/cmp_luasnip',
@@ -42,6 +44,11 @@ return {
       luasnip.config.setup {}
 
       cmp.setup {
+        formatting = {
+          format = require('lspkind').cmp_format {
+            before = require('tailwind-tools.cmp').lspkind_format,
+          },
+        },
         snippet = {
           expand = function(args)
             luasnip.lsp_expand(args.body)

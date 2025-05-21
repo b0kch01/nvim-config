@@ -22,5 +22,8 @@ return {
         client.server_capabilities.documentRangeFormattingProvider = false
       end,
     },
+    keys = {
+      { '<leader>ts', '<cmd>TailwindSort<cr>', desc = '[T]ailwind [s]ort' },
+    },
   },
 }
