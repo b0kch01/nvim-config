@@ -5,7 +5,6 @@ return {
     opts = {
       bufdelete = { enabled = true },
       indent = { enabled = true },
-      image = { enabled = true },
       toggle = { enabled = true },
     },
 

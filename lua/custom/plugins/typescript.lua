@@ -4,11 +4,11 @@ return {
       'folke/ts-comments.nvim',
       opts = {},
       event = 'VeryLazy',
-      enabled = vim.fn.has 'nvim-0.10.0' == 1,
     },
   },
   {
     'pmizio/typescript-tools.nvim',
+    enabled = false,
     dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
     config = {
       settings = {
