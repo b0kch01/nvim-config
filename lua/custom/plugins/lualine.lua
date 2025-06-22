@@ -5,14 +5,11 @@ return {
   event = 'VeryLazy',
 
   opts = function()
-    -- Eviline config for lualine
-    -- Author: shadmansaleh
-    -- Credit: glepnir
-    -- Color table for highlights
     local p = require 'tokyodark.palette'
 
     local colors = {
       bg = p.bg1,
+      bg2 = p.bg2,
       fg = p.fg,
       yellow = p.yellow,
       cyan = p.cyan,
@@ -45,9 +42,21 @@ return {
       },
       options = {
         -- Disable sections and component separators
-        component_separators = '',
+        icons_enabled = true,
         section_separators = '',
-        theme = 'tokyodark',
+        component_separators = '',
+        theme = {
+          normal = {
+            a = { fg = colors.fg, bg = colors.bg },
+            y = { fg = colors.fg, bg = colors.bg },
+            z = { fg = colors.fg, bg = colors.bg },
+          },
+          inactive = {
+            a = { fg = colors.fg, bg = colors.bg },
+            y = { fg = colors.fg, bg = colors.bg },
+            z = { fg = colors.fg, bg = colors.bg },
+          },
+        },
         ignore_focus = {
           'neo-tree',
         },
@@ -56,39 +65,40 @@ return {
         -- these are to remove the defaults
         lualine_a = {},
         lualine_b = {},
-        lualine_y = {},
-        lualine_z = {},
-        -- These will be filled later
         lualine_c = {},
         lualine_x = {},
+        lualine_y = {},
+        lualine_z = {},
       },
       inactive_sections = {
         -- these are to remove the defaults
         lualine_a = {},
         lualine_b = {},
-        lualine_y = {},
-        lualine_z = {},
         lualine_c = {},
         lualine_x = {},
+        lualine_y = {},
+        lualine_z = {},
       },
     }
 
-    -- Inserts a component in lualine_c at left section
     local function ins_left(component)
-      table.insert(config.sections.lualine_c, component)
+      table.insert(config.sections.lualine_a, component)
     end
 
-    -- Inserts a component in lualine_x at right section
     local function ins_right(component)
-      table.insert(config.sections.lualine_x, component)
+      table.insert(config.sections.lualine_z, component)
+    end
+
+    local function ins_right2(component)
+      table.insert(config.sections.lualine_y, component)
     end
 
     ins_left {
       function()
         return ''
       end,
-      color = { fg = colors.red }, -- Sets highlighting of component
-      padding = { left = 1, right = 2 }, -- We don't need space before this
+      color = { fg = colors.red, bg = colors.bg2, gui = 'bold' }, -- Sets highlighting of component
+      padding = { left = 1, right = 1 }, -- We don't need space before this
     }
 
     ins_left {
@@ -105,9 +115,8 @@ return {
           [''] = colors.blue,
           V = colors.blue,
         }
-        return { fg = mode_color[vim.fn.mode()] }
+        return { fg = mode_color[vim.fn.mode()], bg = colors.bg2 }
       end,
-      padding = { right = 1 },
     }
 
     -- ins_left {
@@ -121,8 +130,6 @@ return {
       cond = conditions.buffer_not_empty,
       color = { fg = colors.magenta, gui = 'bold' },
     }
-
-    ins_left { 'location' }
 
     -- ins_left { 'progress', color = { fg = colors.fg, gui = 'bold' } }
 
@@ -145,26 +152,26 @@ return {
       },
     }
 
-    ins_right {
-      -- Lsp server name .
-      function()
-        local msg = 'No Active Lsp'
-        local buf_ft = vim.api.nvim_get_option_value('filetype', { buf = 0 })
-        local clients = vim.lsp.get_clients()
-        if next(clients) == nil then
-          return msg
-        end
-        for _, client in ipairs(clients) do
-          local filetypes = client.config.filetypes
-          if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
-            return client.name
-          end
-        end
-        return msg
-      end,
-      icon = ' ',
-      color = { fg = '#ffffff', gui = 'bold' },
-    }
+    -- ins_right {
+    --   -- Lsp server name .
+    --   function()
+    --     local msg = 'No Active Lsp'
+    --     local buf_ft = vim.api.nvim_get_option_value('filetype', { buf = 0 })
+    --     local clients = vim.lsp.get_clients()
+    --     if next(clients) == nil then
+    --       return msg
+    --     end
+    --     for _, client in ipairs(clients) do
+    --       local filetypes = client.config.filetypes
+    --       if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
+    --         return client.name
+    --       end
+    --     end
+    --     return msg
+    --   end,
+    --   icon = ' ',
+    --   color = { fg = '#ffffff', gui = 'bold' },
+    -- }
 
     -- Add components to right sections
     -- ins_right {
@@ -181,16 +188,16 @@ return {
     --   color = { fg = colors.green, gui = 'bold' },
     -- }
 
-    ins_right {
+    ins_right2 {
       'branch',
       icon = '',
-      color = { fg = colors.violet, gui = 'bold' },
+      color = { fg = colors.yellow, gui = 'bold' },
     }
 
-    ins_right {
+    ins_right2 {
       'diff',
       -- Is it me or the symbol for modified is really weird
-      symbols = { added = ' ', modified = '󰝤 ', removed = ' ' },
+      symbols = { added = ' ', modified = ' ', removed = ' ' },
       diff_color = {
         added = { fg = colors.green },
         modified = { fg = colors.orange },
@@ -201,11 +208,25 @@ return {
 
     -- ins_right {
     --   function()
+    --     return '|'
+    --   end,
+    --
+    --   padding = 0,
+    -- }
+
+    ins_right {
+      'filetype',
+    }
+
+    -- ins_right {
+    --   function()
     --     return '▊'
     --   end,
     --   color = { fg = colors.blue },
     --   padding = { left = 1 },
     -- }
+    --
+    ins_right { 'location', color = { bg = colors.bg2 } }
 
     -- Now don't forget to initialize lualine
     return config
