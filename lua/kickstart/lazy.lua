@@ -15,4 +15,18 @@ require('lazy').setup {
   require 'kickstart.plugins.neo-tree',
 
   { import = 'custom.plugins' },
+
+  performance = {
+    rtp = {
+      -- disable some rtp plugins
+      disabled_plugins = {
+        'gzip',
+        'netrwPlugin',
+        'tarPlugin',
+        'tohtml',
+        'tutor',
+        'zipPlugin',
+      },
+    },
+  },
 }

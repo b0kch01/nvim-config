@@ -5,6 +5,7 @@ return {
     dependencies = {
       'kevinhwang91/promise-async',
     },
+    lazy = true,
     config = function()
       require('ufo').setup {
         -- treesitter not required

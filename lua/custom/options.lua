@@ -76,3 +76,6 @@ vim.opt.scrolloff = 10
 
 -- Use editorconfig when avaialable
 vim.g.editorconfig = true
+
+-- Slueth Config
+vim.g.sleuth_text_defaults = 'tabstop=2'
