@@ -1,1 +1,1 @@
-return { 'vuciv/golf' }
+return { lazy = 'VeryLazy', 'vuciv/golf' }

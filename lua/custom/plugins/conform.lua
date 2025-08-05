@@ -13,10 +13,23 @@ return {
         mode = '',
         desc = '[F]ormat buffer',
       },
+      {
+        '<leader>ta',
+        function()
+          vim.g.disable_autoformat = not vim.g.disable_autoformat
+          print('Autoformat disabled: ' .. tostring(vim.g.disable_autoformat))
+        end,
+        mode = 'n',
+        desc = '[t]oggle [a]utoformat',
+      },
     },
     opts = {
       notify_on_error = true,
       format_on_save = function(bufnr)
+        if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+          return
+        end
+
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
@@ -33,8 +46,8 @@ return {
         }
       end,
       formatters_by_ft = {
-        lua = { 'stylua' },
-        ['*'] = { 'prettierd', stop_after_first = true },
+        lua = { 'stylua', stop_after_first = true },
+        ['*'] = { 'prettierd' },
       },
     },
   },

@@ -5,11 +5,11 @@ return {
   event = 'VeryLazy',
 
   opts = function()
-    local p = require 'tokyodark.palette'
+    local p = require('tokyonight.colors').setup { style = 'night' }
 
     local colors = {
-      bg = p.bg1,
-      bg2 = p.bg2,
+      bg = p.bg_statusline,
+      bg2 = p.bg_dark1,
       fg = p.fg,
       yellow = p.yellow,
       cyan = p.cyan,
@@ -97,7 +97,7 @@ return {
       function()
         return ''
       end,
-      color = { fg = colors.red, bg = colors.bg2, gui = 'bold' }, -- Sets highlighting of component
+      color = { fg = colors.red }, -- Sets highlighting of component
       padding = { left = 1, right = 1 }, -- We don't need space before this
     }
 
@@ -115,7 +115,7 @@ return {
           [''] = colors.blue,
           V = colors.blue,
         }
-        return { fg = mode_color[vim.fn.mode()], bg = colors.bg2 }
+        return { fg = mode_color[vim.fn.mode()] }
       end,
     }
 

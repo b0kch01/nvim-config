@@ -3,6 +3,7 @@ return {
     'folke/snacks.nvim',
     lazy = false,
     opts = {
+      notifier = { enabled = true },
       bufdelete = { enabled = true },
       indent = { enabled = true },
       toggle = { enabled = true },
@@ -12,12 +13,6 @@ return {
           { section = 'header' },
           { section = 'keys', gap = 1, padding = 1 },
           { section = 'startup' },
-          {
-            section = 'terminal',
-            cmd = 'ls -la',
-            pane = 2,
-            indent = 4,
-          },
         },
       },
     },

@@ -5,6 +5,9 @@
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
+-- Line Number Toggle
+vim.keymap.set('n', '<leader>ln', '<cmd>set relativenumber!<CR>', { desc = 'Toggle relative [l]ine [n]umbers' })
+
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 

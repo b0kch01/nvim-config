@@ -2,13 +2,20 @@ return {
   {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
+    event = 'VimEnter',
     dependencies = {
-      { 'williamboman/mason.nvim', opts = {} },
+      -- INIT MASON
+      { 'williamboman/mason.nvim', config = true },
+
+      -- MASON TOOLS WILL BE INIT IN THE CONFIG:
       'williamboman/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
-      -- Useful status updates for LSP.
-      { 'j-hui/fidget.nvim', opts = {} },
+      -- FIDGET
+      'j-hui/fidget.nvim',
+
+      -- Blink
+      'saghen/blink.cmp',
     },
     config = function()
       --  This function gets run when an LSP attaches to a particular buffer.
@@ -74,7 +81,7 @@ return {
           --
           -- When you move your cursor, the highlights will be cleared (the second autocommand).
           local client = vim.lsp.get_client_by_id(event.data.client_id)
-          if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
+          if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf) then
             local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
             vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
               buffer = event.buf,
@@ -108,23 +115,50 @@ return {
         end,
       })
 
-      -- Change diagnostic symbols in the sign column (gutter)
-      if vim.g.have_nerd_font then
-        local signs = { ERROR = '', WARN = '', INFO = '', HINT = '' }
-        local diagnostic_signs = {}
-        for type, icon in pairs(signs) do
-          diagnostic_signs[vim.diagnostic.severity[type]] = icon
-        end
-        vim.diagnostic.config { signs = { text = diagnostic_signs } }
-      end
+      -- Diagnostic Config
+      -- See :help vim.diagnostic.Opts
+      vim.diagnostic.config {
+        severity_sort = true,
+        float = { border = 'rounded', source = 'if_many' },
+        underline = { severity = vim.diagnostic.severity.ERROR },
+        signs = vim.g.have_nerd_font and {
+          text = {
+            [vim.diagnostic.severity.ERROR] = '󰅚 ',
+            [vim.diagnostic.severity.WARN] = '󰀪 ',
+            [vim.diagnostic.severity.INFO] = '󰋽 ',
+            [vim.diagnostic.severity.HINT] = '󰌶 ',
+          },
+        } or {},
+        virtual_text = {
+          source = 'if_many',
+          spacing = 2,
+          format = function(diagnostic)
+            local diagnostic_message = {
+              [vim.diagnostic.severity.ERROR] = diagnostic.message,
+              [vim.diagnostic.severity.WARN] = diagnostic.message,
+              [vim.diagnostic.severity.INFO] = diagnostic.message,
+              [vim.diagnostic.severity.HINT] = diagnostic.message,
+            }
+            return diagnostic_message[diagnostic.severity]
+          end,
+        },
+      }
+
+      local capabilities = require('blink.cmp').get_lsp_capabilities()
 
       local servers = {
         pyright = {},
         tailwindcss = {},
         eslint_d = {},
+        yamlls = {},
         ts_ls = {
           settings = {
             typescript = {
+              preferences = {
+                includeCompletionsForModuleExports = true,
+                includeCompletionsForImportStatements = true,
+                importModuleSpecifier = 'non-relative',
+              },
               tsserver = {
                 useSyntaxServer = false,
               },
@@ -170,23 +204,59 @@ return {
       }
 
       local ensure_installed = vim.tbl_keys(servers or {})
-      vim.list_extend(ensure_installed, {
-        'stylua', -- Used to format Lua code
-      })
+      vim.list_extend(ensure_installed, { 'stylua' })
 
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
-
-      for server, config in pairs(servers) do
-        if not vim.tbl_isempty(config) then
-          vim.lsp.config(server, config)
-        end
-      end
-
       require('mason-lspconfig').setup {
         ensure_installed = {},
-        automatic_enable = true,
+        automatic_installation = false,
+        handlers = {
+          function(server_name)
+            local server = servers[server_name] or {}
+            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+            require('lspconfig')[server_name].setup(server)
+          end,
+        },
       }
     end,
+  },
+
+  -- Blink
+  {
+    'saghen/blink.cmp',
+    event = 'VimEnter',
+    version = '1.*',
+    opts = {
+      keymap = { preset = 'default' },
+      appearance = { nerd_font_variant = 'mono' },
+      sources = {
+        default = { 'lsp', 'path', 'snippets', 'lazydev' },
+        providers = {
+          lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
+        },
+      },
+      fuzzy = { implementation = 'prefer_rust_with_warning' },
+      signature = { enabled = true },
+    },
+  },
+
+  -- Fidget
+  {
+    'j-hui/fidget.nvim',
+    opts = {
+      notification = {
+        window = {
+          normal_hl = 'String',
+          winblend = 0,
+          x_padding = 0,
+        },
+      },
+      integration = {
+        ['nvim-tree'] = {
+          enable = true,
+        },
+      },
+    },
   },
 
   -- LSP Plugins
@@ -195,6 +265,7 @@ return {
     -- used for completion, annotations and signatures of Neovim apis
     'folke/lazydev.nvim',
     ft = 'lua',
+
     opts = {
       library = {
         -- Load luvit types when the `vim.uv` word is found
